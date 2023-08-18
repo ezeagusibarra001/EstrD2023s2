@@ -272,3 +272,23 @@ estaVacia :: [a] -> Bool
 estaVacia [] = True
 estaVacia _ = False
 
+-- 6b) Dada una lista devuelve su primer elemento.
+
+elPrimero :: [a] -> a
+-- precondicion: la lista no debe estar vacia
+elPrimero (x: xs) = x
+
+-- 6c) Dada una lista devuelve esa lista menos el primer elemento.
+
+sinElPrimero :: [a] -> [a]
+-- precondicion: la lista no debe estar vacia
+sinElPrimero (x: xs) = xs
+
+{- 6d) Dada una lista devuelve un par, donde
+la primera componente es el primer elemento de la
+lista, y la segunda componente es esa 
+lista pero sin el primero-}
+
+splitHead :: [a] -> (a, [a])
+-- precondicion: la lista no debe estar vacia
+splitHead (x: xs) = (x, xs)
