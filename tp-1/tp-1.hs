@@ -25,11 +25,19 @@ maxDelPar :: (Int,Int) -> Int
 maxDelPar (x, y) = max x y
 
 -- 2 ---------------------------------------------
+{-
+De 4 ejemplos de expresiones diferentes que denoten el número 10, utilizando en cada expre-
+sión a to das las funciones del punto anterior.
+Ejemplo: maxDePar (divisionYResto (suma 5 5) (sucesor 0))
+-}
 
--- sumar 5 5
--- sucesor 9
--- maxDelPar (10, 5)
--- sumar 4 6
+-- maxDelPar (divisionYResto (sumar (sucesor 4) 15) 2)
+
+-- maxDelPar (divisionYResto (sumar (sucesor 9) 30) 4)
+
+-- maxDelPar (divisionYResto (sumar (sucesor 19) 60) 8)
+
+-- maxDelPar (divisionYResto (sumar (sucesor 39) 120) 16)
 
 -- 3 ---------------------------------------------
 
