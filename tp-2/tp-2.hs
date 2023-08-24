@@ -186,6 +186,130 @@ lista completa.-}
 
 sinLosPrimeros :: Int -> [a] -> [a]
 -- PRECOND: n >= 0
-sinLosPrimeros 0 xs = xs
 sinLosPrimeros _ [] = []
-sinLosPrimeros n (x : xs) = sinLosPrimeros (n-1) xs
+sinLosPrimeros 0 xs = xs
+sinLosPrimeros n (_ : xs) = sinLosPrimeros (n-1) xs
+
+sinLosPrimeros' :: Int -> [a] -> [a]
+sinLosPrimeros' 0 xs = xs
+sinLosPrimeros' n xs = 
+    if (null xs)
+        then []
+        else sinLosPrimeros' (n-1) (tail xs)
+
+--3------------------------------------------------------
+data Persona = P String Int
+    deriving Show
+eze = P "eze" 21
+viejo = P "viejo" 99
+nene = P "nene" 3
+
+
+edad :: Persona -> Int
+edad (P _ e) = e
+
+{-3.1.1 Dados una edad y una lista de personas devuelve a 
+las personas mayores a esa edad-}
+
+mayoresA :: Int -> [Persona] -> [Persona]
+mayoresA _ [] = []
+mayoresA n (p : ps) = 
+    if (edad p) > n
+        then p : mayoresA n ps
+        else mayoresA n ps
+
+{-3.1.2 Dada una lista de personas devuelve el promedio de
+edad entre esas personas. Precondición: 
+la lista al menos p osee una persona.-}
+
+promedioEdad :: [Persona] -> Int
+--PRECOND: la lista al menos posee una persona
+promedioEdad [] = error "La lista al menos posee una persona"
+promedioEdad [p] = edad p
+promedioEdad ps = div (edadTotal ps) (longitud ps)
+
+edadTotal :: [Persona] -> Int
+edadTotal [] = 0
+edadTotal (p : ps) = (edad p) + edadTotal ps
+
+{-3.1.3 Dada una lista de personas devuelve la persona 
+más vieja de la lista. Precondición : la lista al menos 
+posee una persona.-}
+
+elMasViejo :: [Persona] -> Persona
+--PRECOND: la lista al menos posee una persona.
+elMasViejo [] = error "La lista al menos posee una persona"
+elMasViejo [p] = p 
+elMasViejo (p : ps) = 
+    if edad p > edad (elMasViejo ps)
+        then p
+        else elMasViejo ps
+
+data TipoDePokemon = Agua | Fuego | Planta
+data Pokemon = ConsPokemon TipoDePokemon Int
+data Entrenador = ConsEntrenador String [Pokemon]
+
+pikachu = ConsPokemon Agua 12
+charmander = ConsPokemon Fuego 10
+bulbasaur = ConsPokemon Planta 8
+
+ash = ConsEntrenador "Ash" [pikachu, charmander, charmander]
+brock = ConsEntrenador "Brock" [bulbasaur, bulbasaur]
+
+
+pokemonDe :: Entrenador -> [Pokemon]
+pokemonDe (ConsEntrenador _ ps) = ps
+
+
+{-3.2.1 Devuelve la cantidad de Pokémon que 
+posee el entrenador -}
+
+cantPokemon :: Entrenador -> Int
+cantPokemon (ConsEntrenador _ ps) = longitud ps
+
+{-3.2.2 Devuelve la cantidad de Pokémon de determinado tipo 
+que posee el entrenador.-}
+
+cantPokemonDe :: TipoDePokemon -> Entrenador -> Int
+cantPokemonDe t (ConsEntrenador _ ps) = cantPokemonDe' t ps
+
+cantPokemonDe' :: TipoDePokemon -> [Pokemon] -> Int
+cantPokemonDe' _ [] = 0
+cantPokemonDe' t (p : ps) =
+    if esIgual t (tipoDe p)
+        then 1 + cantPokemonDe' t ps
+        else cantPokemonDe' t ps
+
+esIgual :: TipoDePokemon -> TipoDePokemon -> Bool
+esIgual Agua Agua = True
+esIgual Fuego Fuego = True
+esIgual Planta Planta = True
+esIgual _ _ = False
+
+tipoDe :: Pokemon -> TipoDePokemon
+tipoDe (ConsPokemon t _ )= t
+
+{-3.2.3 Dados dos entrenadores, indica la cantidad de Pokemon de
+cierto tipo, que le ganarían a los Pokemon del segundo 
+entrenador.-}
+
+cuantosDeTipo_De_LeGananATodosLosDe_ :: TipoDePokemon -> Entrenador -> Entrenador -> Int
+cuantosDeTipo_De_LeGananATodosLosDe_ t e1 e2 = 
+    cuantosDeTipo_De_LeGananATodosLosDe_' t (pokemonDe e1) (pokemonDe e2)
+
+cuantosDeTipo_De_LeGananATodosLosDe_' ::TipoDePokemon -> [Pokemon] -> [Pokemon] -> Int
+cuantosDeTipo_De_LeGananATodosLosDe_' _ [] _ = 0
+cuantosDeTipo_De_LeGananATodosLosDe_' t (p1 : ps1) ps2 =
+     unoSiCeroSino (esIgual t (tipoDe p1) && leGanaATodos (tipoDe p1) ps2) + cuantosDeTipo_De_LeGananATodosLosDe_' t ps1 ps2
+
+    
+
+leGanaA :: TipoDePokemon -> TipoDePokemon -> Bool
+leGanaA Agua Fuego = True
+leGanaA Fuego Planta = True
+leGanaA Planta Agua = True
+leGanaA _ _ = False
+
+leGanaATodos :: TipoDePokemon -> [Pokemon] -> Bool
+leGanaATodos _ [] = True
+leGanaATodos t (p : ps) = (leGanaA t (tipoDe p)) && (leGanaATodos t ps )
