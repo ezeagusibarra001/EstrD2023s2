@@ -337,10 +337,10 @@ proyecto3 = ConsProyecto "proyecto3"
 
 rol1 = Developer Junior proyecto1
 rol2 = Developer SemiSenior proyecto2
-rol3 = Management Senior proyecto3
+rol3 = Developer Senior proyecto3
 
 
-roles = [rol1, rol2, rol3, rol3, rol3, rol2]
+roles = [rol1, rol2, rol3, rol2]
 
 facebook = ConsEmpresa roles
 
@@ -350,7 +350,7 @@ facebook = ConsEmpresa roles
  sin elementos repetidos.-}
 
 proyectos :: Empresa -> [Proyecto]
-proyectos (ConsEmpresa ps) = proyectosDeRoles ps
+proyectos (ConsEmpresa rs) = proyectosDeRoles rs
 
 proyectosDeRoles :: [Rol] -> [Proyecto]
 proyectosDeRoles [] = []
@@ -367,3 +367,25 @@ proyectoDeRol (Management _ p) = p
 esRepetido :: Eq a => a -> [a] -> Bool
 esRepetido _ [] = False
 esRepetido x (y : ys) =  x == y || esRepetido x ys
+
+
+{-3.2 Dada una empresa indica la cantidad de 
+desarrolladores senior que posee, que pertecen
+además a los proyectos dados por parámetro.-}
+
+losDevSenior :: Empresa -> [Proyecto] -> Int
+losDevSenior (ConsEmpresa rs) ps = losDevSenior' rs ps
+
+losDevSenior' :: [Rol] -> [Proyecto] -> Int
+losDevSenior' [] _ = 0
+losDevSenior' (r : rs) ps =
+    unoSiCeroSino (esDevSenior r && existeEn (proyectoDeRol r) ps) + losDevSenior' rs ps
+
+esDevSenior :: Rol -> Bool
+esDevSenior (Developer Senior _) = True
+esDevSenior _ = False
+
+existeEn :: Proyecto -> [Proyecto] -> Bool
+existeEn _ [] = False
+existeEn p' (p : ps) =
+    p' == p || existeEn p' ps
