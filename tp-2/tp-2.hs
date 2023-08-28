@@ -253,7 +253,7 @@ pikachu = ConsPokemon Agua 12
 charmander = ConsPokemon Fuego 10
 bulbasaur = ConsPokemon Planta 8
 
-ash = ConsEntrenador "Ash" [pikachu, charmander, charmander]
+ash = ConsEntrenador "Ash" [pikachu, charmander, bulbasaur]
 brock = ConsEntrenador "Brock" [bulbasaur, bulbasaur]
 
 
@@ -313,3 +313,39 @@ leGanaA _ _ = False
 leGanaATodos :: TipoDePokemon -> [Pokemon] -> Bool
 leGanaATodos _ [] = True
 leGanaATodos t (p : ps) = (leGanaA t (tipoDe p)) && (leGanaATodos t ps )
+
+{-3.2.4 Dado un entrenador, devuelve True si posee 
+al menos un Pokémon de cada tip o posible-}
+
+esMaestroPokemon :: Entrenador -> Bool
+esMaestroPokemon e = (cantPokemonDe Agua e) > 0 &&
+                     (cantPokemonDe Fuego e) > 0 && 
+                     (cantPokemonDe Planta e) > 0
+
+data Seniority = Junior | SemiSenior | Senior
+    deriving Show
+data Proyecto = ConsProyecto String
+    deriving Show
+data Rol = Developer Seniority Proyecto | Management Seniority Proyecto
+    deriving Show
+data Empresa = ConsEmpresa [Rol]
+    deriving Show
+
+proyecto1 = ConsProyecto "proyecto1"
+proyecto2 = ConsProyecto "proyecto2"
+proyecto3 = ConsProyecto "proyecto3"
+
+rol1 = Developer Junior proyecto1
+rol2 = Developer SemiSenior proyecto2
+rol3 = Management Senior proyecto3
+
+
+roles = [rol1, rol2, rol3]
+
+facebook = ConsEmpresa roles
+
+--3-------------------------------------------------------------------------
+
+{-3.1 Dada una empresa denota la lista de proyectos en los que trabaja,
+ sin elementos repetidos.-}
+
