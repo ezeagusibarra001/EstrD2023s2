@@ -323,13 +323,13 @@ esMaestroPokemon e = (cantPokemonDe Agua e) > 0 &&
                      (cantPokemonDe Planta e) > 0
 
 data Seniority = Junior | SemiSenior | Senior
-    deriving Show
+    deriving (Show, Eq)
 data Proyecto = ConsProyecto String
-    deriving Show
+    deriving (Show, Eq)
 data Rol = Developer Seniority Proyecto | Management Seniority Proyecto
-    deriving Show
+    deriving (Show, Eq)
 data Empresa = ConsEmpresa [Rol]
-    deriving Show
+    deriving (Show, Eq)
 
 proyecto1 = ConsProyecto "proyecto1"
 proyecto2 = ConsProyecto "proyecto2"
@@ -340,7 +340,7 @@ rol2 = Developer SemiSenior proyecto2
 rol3 = Management Senior proyecto3
 
 
-roles = [rol1, rol2, rol3]
+roles = [rol1, rol2, rol3, rol3, rol3, rol2]
 
 facebook = ConsEmpresa roles
 
@@ -349,3 +349,21 @@ facebook = ConsEmpresa roles
 {-3.1 Dada una empresa denota la lista de proyectos en los que trabaja,
  sin elementos repetidos.-}
 
+proyectos :: Empresa -> [Proyecto]
+proyectos (ConsEmpresa ps) = proyectosDeRoles ps
+
+proyectosDeRoles :: [Rol] -> [Proyecto]
+proyectosDeRoles [] = []
+proyectosDeRoles (r : rs) =
+    if (esRepetido r rs)
+        then proyectosDeRoles rs
+        else (proyectoDeRol r) : proyectosDeRoles rs
+
+
+proyectoDeRol :: Rol -> Proyecto
+proyectoDeRol (Developer _ p) = p
+proyectoDeRol (Management _ p) = p
+
+esRepetido :: Eq a => a -> [a] -> Bool
+esRepetido _ [] = False
+esRepetido x (y : ys) =  x == y || esRepetido x ys
