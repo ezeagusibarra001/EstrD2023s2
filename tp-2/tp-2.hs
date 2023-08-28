@@ -340,7 +340,7 @@ rol2 = Developer SemiSenior proyecto2
 rol3 = Developer Senior proyecto3
 
 
-roles = [rol1, rol2, rol3, rol2]
+roles = [rol1, rol2, rol2, rol3, rol3, rol3,rol3]
 
 facebook = ConsEmpresa roles
 
@@ -389,3 +389,28 @@ existeEn :: Proyecto -> [Proyecto] -> Bool
 existeEn _ [] = False
 existeEn p' (p : ps) =
     p' == p || existeEn p' ps
+
+
+{-3.3 Indica la cantidad de empleados que 
+trabajan en alguno de los proyectosdados.-}
+
+cantQueTrabajanEn :: [Proyecto] -> Empresa -> Int
+cantQueTrabajanEn ps (ConsEmpresa rs) = cantQueTrabajanEn' ps rs
+
+cantQueTrabajanEn' :: [Proyecto] -> [Rol] -> Int
+cantQueTrabajanEn' ps [] = 0 
+cantQueTrabajanEn' ps (r : rs) =
+    unoSiCeroSino (existeEn (proyectoDeRol r) ps) + cantQueTrabajanEn' ps rs
+
+{-3.4 Devuelve una lista de pares que representa a los
+proyectos (sinrepetir) junto con su cantidad de 
+personas involucradas.-}
+
+asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
+asignadosPorProyecto e =
+    asignadosPorProyecto' (proyectos e) e
+
+asignadosPorProyecto' :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
+asignadosPorProyecto' [] _ = []
+asignadosPorProyecto' (p : ps) e = 
+    (p, cantQueTrabajanEn [p] e) : asignadosPorProyecto' ps e
