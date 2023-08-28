@@ -236,7 +236,7 @@ Dado un par de entrenadores,
 devuelve a sus Pokémon en una lista-}
 
 juntarPokemon :: (Entrenador, Entrenador) -> [Pokemon]
-juntarPokemon  (e1, e2) = (pokemonesDe e1) ++ (pokemonesDe e2) 
+juntarPokemon  (e1, e2) = pokemonesDe e1 ++ pokemonesDe e2
 
 pokemonesDe :: Entrenador -> [Pokemon]
 pokemonesDe (Ent _ p1 p2) = [p1,p2]
