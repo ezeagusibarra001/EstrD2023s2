@@ -54,7 +54,7 @@ data Objeto = Cacharro | Tesoro
 data Camino = Fin | Cofre [Objeto] Camino | Nada Camino
     deriving Show
 
-caminoAlTesoro = Nada (Cofre [Cacharro, Cacharro] (Nada (Cofre [Tesoro, Cacharro] Fin)))
+caminoAlTesoro = Nada (Cofre [Cacharro, Tesoro] (Nada (Cofre [Tesoro, Cacharro] Fin)))
 caminoAlNoTesoro = Nada (Cofre [Cacharro, Cacharro] (Nada (Cofre [Cacharro] Fin)))
 
 caminoConMuchosTesoros = Nada (Cofre [Tesoro, Tesoro,Tesoro] (Nada (Cofre [Tesoro, Tesoro] Fin)))
@@ -92,7 +92,10 @@ de pasos. Por ejemplo, si el número de
 pasos es 5, indica si hay un tesoro en 5 pasos.-}
 
 hayTesoroEn :: Int -> Camino -> Bool
-hayTesoroEn n c = n == (pasosHastaTesoro c)
+hayTesoroEn _ Fin = False
+hayTesoroEn n (Nada c) = hayTesoroEn (n-1) c
+hayTesoroEn n (Cofre os c) = 
+    (n == 0 && hayTesoroAca os) || hayTesoroEn (n-1) c
 
 {-1.2.4 Indica si hay al menos ntesoros en el camino-}
 
@@ -137,11 +140,11 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 arbol :: Tree Int
 arbol = NodeT 10 
             (NodeT 5 
-                (NodeT 10 
+                (NodeT 9 
                     EmptyT 
                     EmptyT) 
                 EmptyT) 
-            (NodeT 5 
+            (NodeT 2 
                 EmptyT 
                 EmptyT) 
 
@@ -162,3 +165,38 @@ sizeT :: Tree a -> Int
 sizeT EmptyT = 0
 sizeT (NodeT _ tl tr) =
     1 + sizeT tl + sizeT tr
+
+{-2.1.3 Dado un árb ol de enteros devuelve un
+árbol con el doble de cada número.-}
+
+mapDobleT :: Tree Int -> Tree Int
+mapDobleT EmptyT = EmptyT
+mapDobleT (NodeT n tl tr) =
+    (NodeT (n * 2) (mapDobleT tl) (mapDobleT tr)) 
+
+perteneceT :: Eq a => a -> Tree a -> Bool
+perteneceT _ EmptyT = False
+perteneceT e (NodeT e1 tl tr) =
+    e == e1 || (perteneceT e tl) || (perteneceT e tr)
+
+{-2.1.4 Dados un elemento e y un árbol binario devuelve
+la cantidad de elementos del árbol que son iguales a e.-}
+
+aparicionesT :: Eq a => a -> Tree a -> Int
+aparicionesT _ EmptyT = 0
+aparicionesT e (NodeT e1 tl tr) =
+    unoSiCeroSino(e == e1) + (aparicionesT e tl) + (aparicionesT e tr)
+
+{-2.1.5 Dado un árb ol devuelve los elementos
+que se encuentran en sus hojas-}
+
+leaves :: Tree a -> [a]
+leaves EmptyT = []
+leaves (NodeT e EmptyT EmptyT) = [e]
+leaves (NodeT _ tl tr) = (leaves tl) ++ (leaves tr)
+
+{-2.1.7 Dado un árb ol devuelve su altura-}
+
+heightT :: Tree a -> Int
+heightT EmptyT
+heightT (NodeT e tr tl) = 
