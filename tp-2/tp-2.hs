@@ -120,9 +120,9 @@ longitud.-}
 zipMaximos :: [Int] -> [Int] -> [Int]
 zipMaximos [] ys = ys
 zipMaximos xs [] = xs
-zipMaximos (x : xs) ys = if x > head ys
-        then x : zipMaximos xs (tail ys)
-        else (head ys) : zipMaximos xs (tail ys)
+zipMaximos (x : xs) (y: ys) = if x > y
+        then x : zipMaximos xs ys
+        else y : zipMaximos xs ys
 
 {-1.15 Dada una lista devuelve el mínimo-}
 
