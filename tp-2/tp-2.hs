@@ -4,7 +4,7 @@
 
 sumatoria :: [Int] -> Int
 sumatoria []     = 0
-sumatoria (n:ns) = n + (sumatoria ns)
+sumatoria (n:ns) = n + sumatoria ns
 
 {-1.2 Dada una lista de elementos de algún 
 tipo devuelve el largo de esa lista, es decir, 
