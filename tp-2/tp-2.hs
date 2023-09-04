@@ -236,13 +236,14 @@ más vieja de la lista. Precondición : la lista al menos
 posee una persona.-}
 
 elMasViejo :: [Persona] -> Persona
---PRECOND: la lista al menos posee una persona.
-elMasViejo [] = error "La lista al menos posee una persona"
-elMasViejo [p] = p 
-elMasViejo (p : ps) = 
-    if edad p > edad (elMasViejo ps)
-        then p
-        else elMasViejo ps
+elMasViejo [x] = x
+elMasViejo (x:xs) = elMayor x (elMasViejo xs)
+
+elMayor :: Persona -> Persona -> Persona
+elMayor p1 p2 = 
+    if edad p1 > edad p2
+        then p1
+        else p2
 
 data TipoDePokemon = Agua | Fuego | Planta
 data Pokemon = ConsPokemon TipoDePokemon Int
