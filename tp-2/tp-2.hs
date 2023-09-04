@@ -295,12 +295,12 @@ entrenador.-}
 
 cuantosDeTipo_De_LeGananATodosLosDe_ :: TipoDePokemon -> Entrenador -> Entrenador -> Int
 cuantosDeTipo_De_LeGananATodosLosDe_ t e1 e2 = 
-    cuantosDeTipo_De_LeGananATodosLosDe_' t (pokemonDe e1) (pokemonDe e2)
+    cuantosDeTipo_DeLista_LeGananATodosLosDeLista_ t (pokemonDe e1) (pokemonDe e2)
 
-cuantosDeTipo_De_LeGananATodosLosDe_' ::TipoDePokemon -> [Pokemon] -> [Pokemon] -> Int
-cuantosDeTipo_De_LeGananATodosLosDe_' _ [] _ = 0
-cuantosDeTipo_De_LeGananATodosLosDe_' t (p1 : ps1) ps2 =
-     unoSiCeroSino (esIgual t (tipoDe p1) && leGanaATodos (tipoDe p1) ps2) + cuantosDeTipo_De_LeGananATodosLosDe_' t ps1 ps2
+cuantosDeTipo_DeLista_LeGananATodosLosDeLista_ ::TipoDePokemon -> [Pokemon] -> [Pokemon] -> Int
+cuantosDeTipo_DeLista_LeGananATodosLosDeLista_ _ [] _ = 0
+cuantosDeTipo_DeLista_LeGananATodosLosDeLista_ t (p1 : ps1) ps2 =
+     unoSiCeroSino (esIgual t (tipoDe p1) && leGanaATodos (tipoDe p1) ps2) + cuantosDeTipo_DeLista_LeGananATodosLosDeLista_ t ps1 ps2
 
     
 
