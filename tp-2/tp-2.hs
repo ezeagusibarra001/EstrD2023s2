@@ -225,7 +225,6 @@ la lista al menos p osee una persona.-}
 promedioEdad :: [Persona] -> Int
 --PRECOND: la lista al menos posee una persona
 promedioEdad [] = error "La lista al menos posee una persona"
-promedioEdad [p] = edad p
 promedioEdad ps = div (edadTotal ps) (longitud ps)
 
 edadTotal :: [Persona] -> Int
