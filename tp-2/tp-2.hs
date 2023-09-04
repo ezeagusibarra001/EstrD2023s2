@@ -312,7 +312,7 @@ leGanaA _ _ = False
 
 leGanaATodos :: TipoDePokemon -> [Pokemon] -> Bool
 leGanaATodos _ [] = True
-leGanaATodos t (p : ps) = (leGanaA t (tipoDe p)) && (leGanaATodos t ps )
+leGanaATodos t (p : ps) = leGanaA t (tipoDe p) && leGanaATodos t ps 
 
 {-3.2.4 Dado un entrenador, devuelve True si posee 
 al menos un Pokémon de cada tip o posible-}
