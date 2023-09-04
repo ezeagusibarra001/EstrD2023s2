@@ -342,7 +342,7 @@ proyecto2 = ConsProyecto "proyecto2"
 proyecto3 = ConsProyecto "proyecto3"
 
 rol1 = Developer Junior proyecto1
-rol2 = Developer SemiSenior proyecto2
+rol2 = Developer SemiSenior proyecto1
 rol3 = Developer Senior proyecto3
 
 
@@ -417,10 +417,10 @@ proyectos (sinrepetir) junto con su cantidad de
 personas involucradas.-}
 
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
-asignadosPorProyecto e =
-    asignadosPorProyecto' (proyectos e) e
+asignadosPorProyecto (ConsEmpresa rs) = 
+    asignadosPorProyecto' (proyectosDeRoles rs) rs
 
-asignadosPorProyecto' :: [Proyecto] -> Empresa -> [(Proyecto, Int)]
+asignadosPorProyecto' :: [Proyecto] -> [Rol] -> [(Proyecto, Int)]
 asignadosPorProyecto' [] _ = []
-asignadosPorProyecto' (p : ps) e = 
-    (p, cantQueTrabajanEn [p] e) : asignadosPorProyecto' ps e
+asignadosPorProyecto' (p : ps) rs = 
+    (p, cantQueTrabajanEn' [p] rs) : asignadosPorProyecto' ps rs
