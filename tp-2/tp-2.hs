@@ -360,10 +360,14 @@ proyectos (ConsEmpresa rs) = proyectosDeRoles rs
 
 proyectosDeRoles :: [Rol] -> [Proyecto]
 proyectosDeRoles [] = []
-proyectosDeRoles (r : rs) =
-    if (esRepetido r rs)
-        then proyectosDeRoles rs
-        else (proyectoDeRol r) : proyectosDeRoles rs
+proyectosDeRoles (r : rs) = 
+    agregarSiNoEsta (proyectoDeRol r) (proyectosDeRoles rs)
+
+agregarSiNoEsta :: Eq a => a -> [a] -> [a]
+agregarSiNoEsta x xs = 
+    if esRepetido x xs
+        then xs
+        else x : xs
 
 
 proyectoDeRol :: Rol -> Proyecto
