@@ -214,4 +214,81 @@ levelN 0 (NodeT e _ _) = [e]
 levelN n (NodeT e tl tr) =
     levelN (n-1) tl ++ levelN (n-1) tr
 
+listPerLevel :: Tree a -> [[a]]
+listPerLevel EmptyT          = []
+listPerLevel (NodeT a t1 t2) = [a] : unirPerLevel (listPerLevel t1) (listPerLevel t2)
 
+unirPerLevel :: [[a]] -> [[a]] -> [[a]]
+unirPerLevel [] ys         = ys
+unirPerLevel xs []         = xs
+unirPerLevel (x:xs) (y:ys) = (x ++ y) : unirPerLevel xs ys
+
+ramaMasLarga :: Tree a -> [a]
+ramaMasLarga EmptyT          = []
+ramaMasLarga (NodeT a t1 t2) = a : ramaMasLarga (masLargoEntre t1 t2)
+
+masLargoEntre :: Tree a -> Tree a -> Tree a
+masLargoEntre EmptyT t = t
+masLargoEntre t EmptyT = t
+masLargoEntre t1 t2    = 
+  if heightT t1 > heightT t2
+    then t1
+    else t2 
+
+todosLosCaminos :: Tree a -> [[a]]
+todosLosCaminos EmptyT = []
+todosLosCaminos (NodeT x EmptyT EmptyT) = [[x]]
+todosLosCaminos (NodeT a t1 t2) = agregarATodos a (todosLosCaminos t1 ++ todosLosCaminos t2)
+
+agregarATodos :: a -> [[a]] -> [[a]]
+agregarATodos x [] = []
+agregarATodos x (xs:xss) = (x : xs) : (agregarATodos x xss)
+
+data ExpA = Valor Int
+    | Sum ExpA ExpA
+    | Prod ExpA ExpA
+    | Neg ExpA deriving Show
+
+-- eval :: ExpA -> -> Int
+-- Dada una expresión aritmética devuelve el resultado evaluarla.
+
+eval :: ExpA -> Int
+eval (Valor n) = n
+eval (Sum v1 v2) = eval v1 + eval v2
+eval (Prod v1 v2) = eval v1 * eval v2
+eval (Neg v) = -(eval v)
+
+-- eval (Sum (Prod (Valor 2) (Valor 3)) (Valor 4)) = 10
+
+-- simplificar :: ExpA -> ExpA
+-- Dada una expresión aritmética, la simplifica según los siguientes criterios (descritos utilizando
+-- notación matemática convencional):
+-- a) 0 + x = x + 0 = x
+-- b) 0 * x = x * 0 = 0
+-- c) 1 * x = x * 1 = x
+-- d) - (- x) = x
+
+simplificar :: ExpA -> ExpA
+simplificar (Valor n) = Valor n
+simplificar (Sum v1 v2) = simplificarSuma (simplificar v1) (simplificar v2)
+simplificar (Prod v1 v2) = simplificarProducto (simplificar v1) (simplificar v2)
+simplificar (Neg v) = simplificarNegacion (simplificar v)
+
+simplificarSuma :: ExpA -> ExpA -> ExpA
+simplificarSuma (Valor 0) v = v
+simplificarSuma v (Valor 0) = v
+simplificarSuma v1 v2 = Sum v1 v2
+
+simplificarProducto :: ExpA -> ExpA -> ExpA
+simplificarProducto (Valor 0) v = Valor 0
+simplificarProducto v (Valor 0) = Valor 0
+simplificarProducto (Valor 1) v = v
+simplificarProducto v (Valor 1) = v
+simplificarProducto v1 v2 = Prod v1 v2
+
+
+simplificarNegacion :: ExpA -> ExpA
+simplificarNegacion (Neg v) = v
+simplificarNegacion v = Neg v
+
+-- simplificar (Sum (Valor 0) (Valor 3)) = Valor 3
