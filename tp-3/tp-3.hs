@@ -198,5 +198,6 @@ leaves (NodeT _ tl tr) = (leaves tl) ++ (leaves tr)
 {-2.1.7 Dado un árb ol devuelve su altura-}
 
 heightT :: Tree a -> Int
-heightT EmptyT
-heightT (NodeT e tr tl) = 
+heightT EmptyT = 0
+heightT (NodeT _ tl tr) =
+    1 + max (heightT tl) (heightT tr)
