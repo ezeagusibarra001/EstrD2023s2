@@ -214,7 +214,7 @@ las personas mayores a esa edad-}
 mayoresA :: Int -> [Persona] -> [Persona]
 mayoresA _ [] = []
 mayoresA n (p : ps) = 
-    if (edad p) > n
+    if edad p > n
         then p : mayoresA n ps
         else mayoresA n ps
 
@@ -230,7 +230,7 @@ promedioEdad ps = div (edadTotal ps) (longitud ps)
 
 edadTotal :: [Persona] -> Int
 edadTotal [] = 0
-edadTotal (p : ps) = (edad p) + edadTotal ps
+edadTotal (p : ps) = edad p + edadTotal ps
 
 {-3.1.3 Dada una lista de personas devuelve la persona 
 más vieja de la lista. Precondición : la lista al menos 
