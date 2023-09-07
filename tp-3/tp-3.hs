@@ -29,7 +29,7 @@ esMismoColor _ _ = False
 de dicho color a la celda.-}
 
 poner :: Color -> Celda -> Celda
-poner c celda = (Bolita c celda)
+poner c celda = Bolita c celda
 
 {-3.1.3 Dado un color y una celda, quita una bolita
 de dicho color de la celda. 
