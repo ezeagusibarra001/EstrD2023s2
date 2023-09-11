@@ -318,17 +318,12 @@ leGanaATodos t (p : ps) = leGanaA t (tipoDe p) && leGanaATodos t ps
 al menos un Pokémon de cada tip o posible-}
 
 esMaestroPokemon :: Entrenador -> Bool
-esMaestroPokemon e = 
-    tieneAgua e && tieneFuego e && tienePlanta e
+esMaestroPokemon (ConsEntrenador _ pokemones) =
+  tieneTipo pokemones Agua && tieneTipo pokemones Fuego && tieneTipo pokemones Planta
 
-tieneAgua :: Entrenador -> Bool
-tieneAgua e = cantPokemonDe Agua e > 0
-
-tieneFuego :: Entrenador -> Bool
-tieneFuego e = cantPokemonDe Fuego e > 0
-
-tienePlanta :: Entrenador -> Bool
-tienePlanta e = cantPokemonDe Planta e > 0
+tieneTipo :: [Pokemon] -> TipoDePokemon -> Bool
+tieneTipo [] _ = False
+tieneTipo (p : ps) t = esIgual t (tipoDe p) || tieneTipo ps t
 
     
 data Seniority = Junior | SemiSenior | Senior
