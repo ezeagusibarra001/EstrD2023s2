@@ -427,10 +427,17 @@ proyectos (sinrepetir) junto con su cantidad de
 personas involucradas.-}
 
 asignadosPorProyecto :: Empresa -> [(Proyecto, Int)]
-asignadosPorProyecto (ConsEmpresa rs) = 
-    asignadosPorProyecto' (proyectosDeRoles rs) rs
+asignadosPorProyecto (ConsEmpresa roles) =
+  asignadosPorProyectoRec roles
 
-asignadosPorProyecto' :: [Proyecto] -> [Rol] -> [(Proyecto, Int)]
-asignadosPorProyecto' [] _ = []
-asignadosPorProyecto' (p : ps) rs = 
-    (p, cantQueTrabajanEn' [p] rs) : asignadosPorProyecto' ps rs
+asignadosPorProyectoRec :: [Rol] -> [(Proyecto, Int)]
+asignadosPorProyectoRec [] = []
+asignadosPorProyectoRec (r : rs) =
+  consolidar r (asignadosPorProyectoRec rs)
+
+consolidar :: Rol -> [(Proyecto, Int)] -> [(Proyecto, Int)]
+consolidar rol [] = [(proyecto rol, 1)]
+consolidar rol (t : ts) =
+  if nombreP (proyecto rol) == nombreP (fst t)
+    then (fst t, snd t + 1) : ts
+    else t : (consolidar rol ts)
