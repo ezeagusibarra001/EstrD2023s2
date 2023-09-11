@@ -354,19 +354,31 @@ facebook = ConsEmpresa roles
  sin elementos repetidos.-}
 
 proyectos :: Empresa -> [Proyecto]
-proyectos (ConsEmpresa rs) = proyectosDeRoles rs
+proyectos (ConsEmpresa lrs) = proyectosDeRoles lrs
 
 proyectosDeRoles :: [Rol] -> [Proyecto]
 proyectosDeRoles [] = []
-proyectosDeRoles (r : rs) = 
-    agregarSiNoEsta (proyectoDeRol r) (proyectosDeRoles rs)
+proyectosDeRoles (r : rs) = agregarProyecto (proyecto r) (proyectosDeRoles rs)
 
-agregarSiNoEsta :: Eq a => a -> [a] -> [a]
-agregarSiNoEsta x xs = 
-    if esRepetido x xs
-        then xs
-        else x : xs
+agregarProyecto :: Proyecto -> [Proyecto] -> [Proyecto]
+agregarProyecto p ps =
+  if estaEnLaLista p ps
+    then ps
+    else p : ps
 
+estaEnLaLista :: Proyecto -> [Proyecto] -> Bool
+estaEnLaLista _ [] = False
+estaEnLaLista p (p2 : ps) = esElMismoProyecto p p2 || estaEnLaLista p ps
+
+proyecto :: Rol -> Proyecto
+proyecto (Developer _ p) = p
+proyecto (Management _ p) = p
+
+nombreP :: Proyecto -> String
+nombreP (ConsProyecto name) = name
+
+esElMismoProyecto :: Proyecto -> Proyecto -> Bool
+esElMismoProyecto (ConsProyecto p) (ConsProyecto p2) = p == p2
 
 proyectoDeRol :: Rol -> Proyecto
 proyectoDeRol (Developer _ p) = p
