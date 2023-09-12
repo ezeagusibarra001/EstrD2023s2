@@ -236,11 +236,17 @@ más vieja de la lista. Precondición : la lista al menos
 posee una persona.-}
 
 elMasViejo :: [Persona] -> Persona
-elMasViejo [p] = p
-elMasViejo (p:ps) = 
-    if edad p > edad (elMasViejo ps)
-        then p
-        else elMasViejo ps
+elMasViejo [] = error "La lista no puede ser vacia"
+elMasViejo (x:xs) = 
+    if null xs
+        then x
+        else elMayor x (elMasViejo xs)
+
+elMayor :: Persona -> Persona -> Persona
+elMayor p1 p2 = 
+    if edad p1 > edad p2
+        then p1
+        else p2
 
 data TipoDePokemon = Agua | Fuego | Planta
 data Pokemon = ConsPokemon TipoDePokemon Int

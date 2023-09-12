@@ -196,13 +196,13 @@ listaDeTesorosObjetos (o : os) =
         then o : listaDeTesorosObjetos os
         else listaDeTesorosObjetos os
 
-{-Devuelve to dos lo caminos en el mapa-}
+{-Devuelve todos lo caminos en el mapa-}
 
 todosLosCaminos :: Mapa -> [[Dir]]
 todosLosCaminos (Fin _) = []
 todosLosCaminos (Bifurcacion _ m1 m2) =
-    (Izq : todosLosCaminos m1) ++
-    (Der : todosLosCaminos m1)
+    agregarATodos Izq (todosLosCaminos m1)
+    ++ agregarATodos Der (todosLosCaminos m2)
 
 
 {- todosLosCaminos :: Tree a -> [[a]]
@@ -211,7 +211,8 @@ todosLosCaminos (NodeT a t1 t2) =
     [a] : 
     agregarATodos a (todosLosCaminos t1)
     ++ agregarATodos a (todosLosCaminos t2)
+ -}
 
 agregarATodos :: a -> [[a]] -> [[a]]
 agregarATodos x [] = []
-agregarATodos x (xs:xss) = (x : xs) : (agregarATodos x xss) -}
+agregarATodos x (xs:xss) = (x : xs) : (agregarATodos x xss)
