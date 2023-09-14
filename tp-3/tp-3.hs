@@ -165,7 +165,7 @@ sizeT (NodeT _ tl tr) =
 mapDobleT :: Tree Int -> Tree Int
 mapDobleT EmptyT = EmptyT
 mapDobleT (NodeT n tl tr) =
-    (NodeT (n * 2) (mapDobleT tl) (mapDobleT tr)) 
+    NodeT (n * 2) (mapDobleT tl) (mapDobleT tr)
 
 perteneceT :: Eq a => a -> Tree a -> Bool
 perteneceT _ EmptyT = False
@@ -202,7 +202,7 @@ en cada nodo del árbol-}
 mirrorT :: Tree a -> Tree a
 mirrorT EmptyT = EmptyT
 mirrorT (NodeT e tl tr) =
-    (NodeT e (mirrorT tr) (mirrorT tl))
+    NodeT e (mirrorT tr) (mirrorT tl)
 
 toList :: Tree a -> [a]
 toList EmptyT = []
