@@ -101,13 +101,15 @@ hayTesoroEn n (Cofre os c) =
 {-1.2.4 Indica si hay al menos ntesoros en el camino-}
 
 alMenosNTesoros :: Int -> Camino -> Bool
-alMenosNTesoros n c = n <= (cantidadDeTesoros c)
+alMenosNTesoros 0 _ = True
+alMenosNTesoros _ Fin = False
+alMenosNTesoros n (Nada c) = alMenosNTesoros n c
+alMenosNTesoros n (Cofre os c) = encontreTodosLosTesoros n os || alMenosNTesoros (n - cantidadDeTesorosAca os) c
 
-cantidadDeTesoros :: Camino -> Int
-cantidadDeTesoros Fin = 0
-cantidadDeTesoros (Nada c) = cantidadDeTesoros c
-cantidadDeTesoros (Cofre os c) =  
-    cantidadDeTesorosAca os + cantidadDeTesoros c
+encontreTodosLosTesoros:: Int -> [Objeto] -> Bool
+encontreTodosLosTesoros 0 _ = True
+encontreTodosLosTesoros _ [] = False
+encontreTodosLosTesoros n (o : os) = encontreTodosLosTesoros (n - unoSiCeroSino (esTesoro o)) os
 
 cantidadDeTesorosAca :: [Objeto] -> Int
 cantidadDeTesorosAca [] = 0
