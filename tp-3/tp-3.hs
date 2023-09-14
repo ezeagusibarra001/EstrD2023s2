@@ -130,11 +130,14 @@ cantTesorosEntre n m (Nada c) = cantTesorosEntre (n-1) (m-1) c
 cantTesorosEntre n m (Cofre obs c) = cantTesorosEntre (n-1) (m-1) c
 
 contarTesorosHasta :: Int -> Camino -> Int
-contarTesorosHasta n Fin = 0
-contarTesorosHasta 0 c   = 0
+contarTesorosHasta _ Fin = 0
+contarTesorosHasta 0 c   = cantidadDeTesorosAca (objetos c)
 contarTesorosHasta n (Nada c) = contarTesorosHasta (n-1) c
 contarTesorosHasta n (Cofre obs c) = cantidadDeTesorosAca obs + contarTesorosHasta (n-1) c
 
+objetos :: Camino -> [Objeto]
+objetos (Nada _) = []
+objetos (Cofre obs _) = obs
 -----------------------------------------------------
 
 data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
