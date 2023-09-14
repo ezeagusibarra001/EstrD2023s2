@@ -81,6 +81,7 @@ la cantidad de pasos a recorrer es 0.
 Precondición: tiene que haber al menos un tesoro.-}
 
 pasosHastaTesoro :: Camino -> Int
+pasosHastaTesoro (Fin) = error "Tiene que haber al menos un tesoro."
 pasosHastaTesoro (Nada c) = 1 + pasosHastaTesoro c
 pasosHastaTesoro (Cofre os c) = 
     if hayTesoroAca os
