@@ -423,9 +423,9 @@ presas2 = ["Liebre", "Ciervo"]
 territorios2 = ["Pradera", "Bosque"]
 
 -- Creamos algunos lobos
-lobo1 = Cazador "Lobo1" presas1 (Cria "Cria1") (Cria "Cria2") (Cria "Cria3")
-lobo2 = Explorador "Lobo2" territorios1 (Cria "Cria4") (Cria "Cria5")
-lobo3 = Cazador "Lobo3" presas2 (Cria "Cria6") (Cria "Cria7") (Cria "Cria8")
+cazador = Cazador "Cazador" presas1 explorador1 explorador2 (Cria "Cria3")
+explorador1 = Explorador "Explorador 1" territorios1 (Cria "Cria4") (Cria "Cria5")
+explorador2 = Explorador "Explorador 2" territorios2 (Cria "Cria4") (Cria "Cria5")
 
 -- Creamos una manada con estos lobos
-manada = M lobo1
+manada = M cazador
