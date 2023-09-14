@@ -104,12 +104,12 @@ alMenosNTesoros :: Int -> Camino -> Bool
 alMenosNTesoros 0 _ = True
 alMenosNTesoros _ Fin = False
 alMenosNTesoros n (Nada c) = alMenosNTesoros n c
-alMenosNTesoros n (Cofre os c) = encontreTodosLosTesoros n os || alMenosNTesoros (n - cantidadDeTesorosAca os) c
+alMenosNTesoros n (Cofre os c) = alMenosNTesoros (losTesorosQueMeQuedan n os) c
 
-encontreTodosLosTesoros:: Int -> [Objeto] -> Bool
-encontreTodosLosTesoros 0 _ = True
-encontreTodosLosTesoros _ [] = False
-encontreTodosLosTesoros n (o : os) = encontreTodosLosTesoros (n - unoSiCeroSino (esTesoro o)) os
+losTesorosQueMeQuedan :: Int -> [Objeto] -> Int
+losTesorosQueMeQuedan 0 _ = 0
+losTesorosQueMeQuedan n [] = n
+losTesorosQueMeQuedan n (o : os) = losTesorosQueMeQuedan (n - unoSiCeroSino (esTesoro o)) os
 
 cantidadDeTesorosAca :: [Objeto] -> Int
 cantidadDeTesorosAca [] = 0
