@@ -155,6 +155,12 @@ devuelve la suma entre sus elementos-}
 
 sumarT :: Tree Int -> Int
 sumarT EmptyT = 0
+sumarT (NodeT n tl tr) =
+    n + sumarT tl + sumarT tr
+
+{-Dado un árbol binario devuelve su cantidad de elementos, es decir, el tamaño 
+del árb ol (size en inglés)-}
+sizeT :: Tree a -> Int
 sizeT EmptyT = 0
 sizeT (NodeT _ tl tr) =
     1 + sizeT tl + sizeT tr
