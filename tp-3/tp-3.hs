@@ -234,15 +234,15 @@ unirPerLevel (x:xs) (y:ys) = (x ++ y) : unirPerLevel xs ys
 
 ramaMasLarga :: Tree a -> [a]
 ramaMasLarga EmptyT          = []
-ramaMasLarga (NodeT a t1 t2) = a : ramaMasLarga (masLargoEntre t1 t2)
+ramaMasLarga (NodeT a t1 t2) = a : masLargoEntre (ramaMasLarga t1) (ramaMasLarga t2)
 
-masLargoEntre :: Tree a -> Tree a -> Tree a
-masLargoEntre EmptyT t = t
-masLargoEntre t EmptyT = t
-masLargoEntre t1 t2    = 
-  if heightT t1 > heightT t2
-    then t1
-    else t2 
+masLargoEntre :: [a] -> [a] -> [a]
+masLargoEntre [] ys = ys
+masLargoEntre xs [] = xs
+masLargoEntre xs ys    = 
+    if length xs > length ys
+        then xs
+        else ys
 
 todosLosCaminos :: Tree a -> [[a]]
 todosLosCaminos EmptyT = []
