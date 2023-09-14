@@ -231,9 +231,9 @@ data Tree a = EmptyT | NodeT a (Tree a) (Tree a)
 data Nave = N (Tree Sector)
     deriving Show
 
-sPuente   = S "Puente" [Motor 1, LanzaTorpedos] ["Capitán", "Oficial de Navegación"]
-sMaquinas = S "Sala de Maquinas" [Motor 2, Almacen [Combustible, Combustible, Oxigeno]] ["Ingeniero de Máquinas", "Técnico de Almacenamiento"]
-sControl  = S "Sala de Control" [Almacen [Comida, Torpedo], LanzaTorpedos] ["Operador de Control", "Técnico de Almacenamiento"]
+sPuente   = S "Puente" [Motor 1, LanzaTorpedos] ["Capitan", "Oficial de Navegacion"]
+sMaquinas = S "Sala de Maquinas" [Motor 2, Almacen [Combustible, Combustible, Oxigeno]] ["Ingeniero de Maquinas", "Tecnico de Almacenamiento"]
+sControl  = S "Sala de Control" [Almacen [Comida, Torpedo], LanzaTorpedos] ["Operador de Control", "Tecnico de Almacenamiento"]
 
 lComponentes = [Motor 99]
 
@@ -341,13 +341,65 @@ agregarCsASector cs' (S id cs ts) = S id (cs' ++ cs) ts
 {-
 Proposito: Incorpora un tripulante a una lista de sectores 
 de la nave.
-Precondición: Todos losid de la lista existen en la nave.
+Precondición: Todos los id de la lista existen en la nave.
 -}
 
 asignarTripulanteA :: Tripulante -> [SectorId] -> Nave -> Nave
 asignarTripulanteA t ids (N tree) = N (asignarTAArbol t ids tree)
 
 asignarTAArbol :: Tripulante -> [SectorId] -> Tree Sector -> Tree Sector
-asignarTAArbol ts ids EmptyT = EmptyT
-asignarTAArbol ts ids (NodeT s t1 t2) =
-    (NodeT asignarSi )
+asignarTAArbol t ids EmptyT = EmptyT
+asignarTAArbol t ids (NodeT s t1 t2) =
+    NodeT (asignarTSi t ids s)  (asignarTAArbol t ids t1) (asignarTAArbol t ids t2)
+
+
+asignarTSi :: Tripulante -> [SectorId] -> Sector -> Sector
+asignarTSi t ids s =
+    if estaEn (sectorId s) ids
+        then agregarTripuA t s
+        else s
+
+estaEn :: SectorId -> [SectorId] -> Bool
+estaEn _ [] = False
+estaEn sid (i : ids) =
+    if sid == i
+        then True
+        else estaEn sid ids
+
+agregarTripuA :: Tripulante -> Sector -> Sector
+agregarTripuA t (S i cs ts) = S i cs (t : ts)
+
+{-Propósito: Devuelve los sectores en donde aparece un 
+tripulante dado.-}
+
+sectoresAsignados :: Tripulante -> Nave -> [SectorId]
+sectoresAsignados t (N tree) = sectoresAsignadosArbol t tree
+
+sectoresAsignadosArbol :: Tripulante -> Tree Sector -> [SectorId]
+sectoresAsignadosArbol _ EmptyT = []
+sectoresAsignadosArbol t (NodeT s t1 t2) =
+    if apareceTEn t (tripulantesDeS s)
+        then (sectorId s) : sectoresAsignadosArbol t t1 ++ sectoresAsignadosArbol t t2
+        else sectoresAsignadosArbol t t1 ++ sectoresAsignadosArbol t t2
+
+tripulantesDeS :: Sector -> [Tripulante]
+tripulantesDeS (S _ _ ts) = ts
+
+apareceTEn :: Tripulante -> [Tripulante] -> Bool
+apareceTEn _ [] = False
+apareceTEn tr (t : ts) = tr == t || apareceTEn tr ts
+
+{-Propósito: Devuelve la lista de tripulantes, 
+sin elementos rep etidos.-}
+
+tripulantes :: Nave -> [Tripulante]
+tripulantes (N tree) = tripulantesArbol tree
+
+tripulantesArbol :: Tree Sector -> [Tripulante]
+tripulantesArbol EmptyT = []
+tripulantesArbol (NodeT s t1 t2) =
+   (tripulantesDeS s) ++ (tripulantesArbol t1) ++ (tripulantesArbol t2)
+
+
+-----------------------------------------------------------------
+
