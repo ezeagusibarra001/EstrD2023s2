@@ -238,10 +238,10 @@ masLargoEntre t1 t2    =
 
 todosLosCaminos :: Tree a -> [[a]]
 todosLosCaminos EmptyT = []
-todosLosCaminos (NodeT a t1 t2) =
-    [a] : 
-    agregarATodos a (todosLosCaminos t1)
-    ++ agregarATodos a (todosLosCaminos t2)
+todosLosCaminos (NodeT x t1 t2) =
+    [x] : 
+    agregarATodos x (todosLosCaminos t1)
+    ++ agregarATodos x (todosLosCaminos t2)
 
 agregarATodos :: a -> [[a]] -> [[a]]
 agregarATodos x [] = []
