@@ -429,3 +429,122 @@ explorador2 = Explorador "Explorador 2" territorios2 (Cria "Cria4") (Cria "Cria5
 
 -- Creamos una manada con estos lobos
 manada = M cazador
+
+
+pertenece :: Eq a => a -> [a] -> Bool
+pertenece a [] = False
+pertenece a (x:xs) = x == a || pertenece a xs
+
+sinRepetidos ::Eq a => [a] -> [a]
+sinRepetidos [] = []
+sinRepetidos (x:xs) = 
+	if pertenece x xs
+		then sinRepetidos xs
+		else x : sinRepetidos xs
+
+{-Dada una manada, indica si la cantidad de 
+alimento cazado es mayor a la cantidad de crías.-}
+
+buenaCaza :: Manada -> Bool
+buenaCaza (M l) = cantDeCrias l <= cantDePresasTotales l
+
+cantDeCrias :: Lobo -> Int
+cantDeCrias (Cria n) = 1
+cantDeCrias (Explorador n ts l1 l2) = cantDeCrias l1 + cantDeCrias l2
+cantDeCrias (Cazador n ts l1 l2 l3) = cantDeCrias l1 + cantDeCrias l2 + cantDeCrias l3
+
+cantDePresasTotales :: Lobo -> Int
+cantDePresasTotales (Cria n) = 0
+cantDePresasTotales (Explorador n ts l1 l2) = cantDePresasTotales l1 + cantDePresasTotales l2
+cantDePresasTotales (Cazador n ps l1 l2 l3) = 
+	length ps + cantDePresasTotales l1 + cantDePresasTotales l2 + cantDePresasTotales l3
+
+cantDePresas :: Lobo -> Int
+cantDePresas (Cazador _ ps _ _ _) = length ps
+cantDePresas _					  = 0
+
+elAlfa :: Manada -> (Nombre, Int)
+elAlfa m = (nombreLobo (elMasCazadorManada m), cantDePresas (elMasCazadorManada m))
+
+elMasCazadorManada :: Manada -> Lobo
+elMasCazadorManada m = elMasCazador (cazadores m)
+
+elMasCazador :: [Lobo] -> Lobo
+elMasCazador [x] = x
+elMasCazador (x:xs) = 
+	if cantDePresas x > cantDePresas (elMasCazador xs)
+		then x
+		else elMasCazador xs 
+
+cazadores :: Manada -> [Lobo]
+cazadores (M l) = cazadoresL l
+
+cazadoresL :: Lobo -> [Lobo]
+cazadoresL (Cria n) = []
+cazadoresL (Explorador n ts l1 l2) = cazadoresL l1 ++ cazadoresL l2
+cazadoresL (Cazador n ps l1 l2 l3) = 
+	(Cazador n ps l1 l2 l3) :
+	cazadoresL l1 ++
+	cazadoresL l2 ++
+	cazadoresL l3
+
+esCazador :: Lobo -> Bool
+esCazador (Cria _) = False
+esCazador (Explorador _ _ _ _) = False
+esCazador (Cazador _ _ _ _ _)  = True
+
+nombreLobo :: Lobo -> Nombre
+nombreLobo (Cria n) 		    = n
+nombreLobo (Explorador n _ _ _) = n
+nombreLobo (Cazador n _ _ _ _)  = n
+
+losQueExploraron :: Territorio -> Manada -> [Nombre]
+losQueExploraron t (M l) = losQueExploraronL t l
+
+losQueExploraronL :: Territorio -> Lobo -> [Nombre]
+losQueExploraronL t (Cria n) = []
+losQueExploraronL t (Explorador n ts l1 l2) = 
+	if pertenece t ts
+		then n : losQueExploraronL t l1 ++ losQueExploraronL t l2
+		else losQueExploraronL t l1 ++ losQueExploraronL t l2
+losQueExploraronL t (Cazador n ps l1 l2 l3) =
+	losQueExploraronL t l1 ++ 
+	losQueExploraronL t l2 ++ 
+	losQueExploraronL t l3
+
+exploradoresPorTerritorio :: Manada -> [(Territorio, [Nombre])]
+exploradoresPorTerritorio m = exploradoresPorTerritorioM m (territoriosSinRep m)
+
+exploradoresPorTerritorioM :: Manada -> [Territorio] -> [(Territorio, [Nombre])]
+exploradoresPorTerritorioM m [] 		= []
+exploradoresPorTerritorioM m (t:ts) = 
+	generadorDeTuplas t (losQueExploraron t m) : exploradoresPorTerritorioM m ts 
+
+superioresDelCazador :: Nombre -> Manada -> [Nombre]
+superioresDelCazador n (M l) = superioresDelCazadorL n l
+
+superioresDelCazadorL :: Nombre -> Lobo -> [Nombre]
+superioresDelCazadorL n (Cria n1) = []
+superioresDelCazadorL n (Explorador n1 ts l1 l2) = 
+	superioresDelCazadorL n l1 ++ superioresDelCazadorL n l2
+superioresDelCazadorL n (Cazador n1 ps l1 l2 l3) = 
+	if n == n1
+		then []
+		else n1 : superioresDelCazadorL n l1 ++ superioresDelCazadorL n l2 ++ superioresDelCazadorL n l3
+
+generadorDeTuplas :: a -> b -> (a, b)
+generadorDeTuplas a b = (a, b)
+
+territoriosSinRep :: Manada -> [Territorio]
+territoriosSinRep (M l) = territoriosSinRepL l
+
+territoriosSinRepL :: Lobo -> [Territorio]
+territoriosSinRepL (Cria n) = []
+territoriosSinRepL (Cazador n ps l1 l2 l3) =
+    sinRepetidos (territoriosSinRepL l1 ++
+        					territoriosSinRepL l2 ++
+        					territoriosSinRepL l3)
+territoriosSinRepL (Explorador n ts l1 l2) =
+    sinRepetidos (ts ++
+        					territoriosSinRepL l1 ++
+        					territoriosSinRepL l2)
