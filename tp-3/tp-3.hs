@@ -240,8 +240,6 @@ ramaMasLarga EmptyT          = []
 ramaMasLarga (NodeT a t1 t2) = a : masLargoEntre (ramaMasLarga t1) (ramaMasLarga t2)
 
 masLargoEntre :: [a] -> [a] -> [a]
-masLargoEntre [] ys = ys
-masLargoEntre xs [] = xs
 masLargoEntre xs ys    = 
     if length xs > length ys
         then xs
