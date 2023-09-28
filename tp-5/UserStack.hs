@@ -18,3 +18,15 @@ desapilar stack =
     if isEmptyS stack
         then []
         else (top stack) : desapilar (pop stack)
+
+
+{-
+Dada una posicion válida en la stack y un elemento, 
+ubica dicho elemento en dicha
+posición (se desapilan elementos hasta dicha 
+posición y se inserta en ese lugar)
+-}
+
+insertarEnPos :: Int -> a -> Stack a -> Stack a
+insertarEnPos 0 a st = push a st 
+insertarEnPos x a st = insertarEnPos (x-1) a (pop st)
