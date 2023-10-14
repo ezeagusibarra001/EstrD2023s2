@@ -110,14 +110,17 @@ asignarASector n id (N s t r) = N s (asignarAT n id t) (asignarAR n id r)
 
 asignarAT :: Nombre -> SectorId -> (Map Nombre Tripulante) -> (Map Nombre Tripulante)
 asignarAT n id mapT = let tripulante in fromJust(lookupM n mapT)
+                    --log s
                       assocM n (asignarS id tripulante) mapT
-
+--T log T
 asignarAR :: Nombre -> SectorId -> (MaxHeap Tripulante) -> (MaxHeap Tripulante)
 asignarAR n id maxHeapR =
         if (isEmptyH maxHeapR)
             then emptyH
+                --log m
             else insertH (asignarATR n id (maxH maxHeapR)) (asignarAR n id (deleteMaxH maxHeapR))
 
+--Log T
 asignarATR :: Nombre -> SectorId -> Tripulante -> Tripulante
 asignarATR n id t =
     if (nombre t) === n
