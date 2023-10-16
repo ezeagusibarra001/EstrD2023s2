@@ -126,3 +126,13 @@ asignarATR n id t =
     if (nombre t) === n
         then asignarS id t
         else t
+
+-- USUARIIO
+
+-- Propósito: Devuelve todos los sectores no vacíos (con tripulantes asignados).
+sectores :: Nave -> Set SectorId
+sectores nave = sectoresDeTripulantes (tripulantesN nave)
+
+sectoresDeTripulantes ::  [Tripulante] -> Set SectorId
+sectoresDeTripulantes []       = 
+sectoresDeTripulantes (t : ts) = 
