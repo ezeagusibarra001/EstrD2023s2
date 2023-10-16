@@ -130,9 +130,42 @@ asignarATR n id t =
 -- USUARIIO
 
 -- Propósito: Devuelve todos los sectores no vacíos (con tripulantes asignados).
+--Eficiencia: O(T log T + T log T)
 sectores :: Nave -> Set SectorId
 sectores nave = sectoresDeTripulantes (tripulantesN nave)
 
+-- O(N log N)
 sectoresDeTripulantes ::  [Tripulante] -> Set SectorId
-sectoresDeTripulantes []       = 
-sectoresDeTripulantes (t : ts) = 
+sectoresDeTripulantes []       = emptyS
+sectoresDeTripulantes (t : ts) = unionS (sectoresT t) (sectoresDeTripulantes ts)
+
+-- Propósito: Devuelve los tripulantes que no poseen sectores asignados.
+-- O(T log T + Log N)
+sinSectoresAsignados :: Nave ->[Tripulante]
+sinSectoresAsignados nave = sinSectoresAsignadosTripulante (tripulantesN nave)
+
+sinSectoresAsignadosTripulante :: [Tripulante] -> [Tripulante]
+sinSectoresAsignadosTripulante []       = emptyS
+sinSectoresAsignadosTripulante (t : ts) = 
+                                if (sizeS (sectoresT t) == 0)
+                                    then (addS t) : (sinSectoresAsignadosTripulante ts)
+                                    else sinSectoresAsignadosTripulante ts
+
+-- Propósito: Devuelve todos los barriles de los sectores asignados de la nave.
+barriles :: Nave -> [Barril]
+barriles nave = barrilesDeTripulantes (setToList (sectores nave)) nave
+
+barrilesDeTripulantes :: [SectorId] -> Nave -> [Barril]
+barrilesDeTripulantes [] nave      = []
+barrilesDeTripulantes (id : ids) nave = (barrilesDeId id nave) ++ barrilesDeTripulantes ids nave
+
+barrilesDeId :: SectorId -> Nave -> [Barril]
+barrilesDeId id nave = obtenerBarril (datosDeSector id nave)
+
+obtenerBarril :: (Set Nombre, [Componente]) -> [Barril]
+obtenerBarril (n, []) = []
+obtenerBarril (n, (c : cs)) = barrilesDeC c ++ obtenerBarri n cs
+
+barrilesDeC :: Componente -> [Barril]
+barrilesDeC (Almacen bs) = bs
+barrilesDeC _ = []
