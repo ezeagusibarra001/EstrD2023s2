@@ -19,10 +19,26 @@ ArrayList newArrayList()
     return l;
 }
 
-ArrayList newArrayListWith(int capacidad){
+ArrayList newArrayListWith(int capacidad)
+{
     ArrayListSt *l = new ArrayListSt;
     l->cantidad = 0;
     l->capacidad = capacidad;
     l->elementos = new int[l->capacidad];
     return l;
+}
+
+int lengthAL(ArrayList xs)
+{
+    return xs->cantidad;
+}
+
+int get(int i, ArrayList xs)
+{
+    return xs->elementos[i];
+}
+
+void set(int i, int x, ArrayList xs)
+{
+    xs->elementos[i] = x;
 }

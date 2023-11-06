@@ -12,3 +12,12 @@ ArrayList newArrayList();
 
 //Crea una lista con 0 elementos y una capacidad dada por parámetro.
 ArrayList newArrayListWith(int capacidad);
+
+// Devuelve la cantidad de elementos existentes
+int lengthAL(ArrayList xs);
+
+// Devuelve el iésimo elemento de la lista.
+int get(int i, ArrayList xs);
+
+// Reemplaza el iésimo elemento por otro dado.
+void set(int i, int x, ArrayList xs);
