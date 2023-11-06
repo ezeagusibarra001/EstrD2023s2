@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string.h>
 using namespace std;
 
 // Propósito: imprime n veces un string s
@@ -149,6 +150,16 @@ int apariciones(char c, string s)
     }
 }
 
+int iApariciones(char c, string s)
+{
+    int cant = 0;
+    for (int i = 0; s[i] != '\0' ; i++)
+    {
+        cant += unoSi(s[i] == c);
+    }
+    return cant;
+}
+
 int main()
 {
     // printN(3, "hola");
@@ -167,5 +178,6 @@ int main()
     // {
     //     cout << "FALSO" << endl;
     // }
-    cout << apariciones('a', "adasa") << endl;
+    // cout << apariciones('a', "adasa") << endl;
+    cout << iApariciones('a', "adasa") << endl;
 }
