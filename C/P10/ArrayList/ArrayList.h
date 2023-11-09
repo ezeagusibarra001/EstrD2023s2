@@ -21,3 +21,7 @@ int get(int i, ArrayList xs);
 
 // Reemplaza el iésimo elemento por otro dado.
 void set(int i, int x, ArrayList xs);
+
+// Decrementa o aumenta la capacidad del array.
+// Nota: en caso de decrementarla, se pierden los elementos del final de la lista.
+void resize(int capacidad, ArrayList xs);

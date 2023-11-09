@@ -8,3 +8,4 @@ struct EntrenadorSt {
     Pokemon* pokemon;
     int cantPokemon;
 };
+
